@@ -85,26 +85,40 @@ fn parseU32(line: []const u8, idx: *u32) u32 {
 
 fn setPal(idx: u32) void {
     if (idx == 0) {
-        vex.pal(0, 0x0c0e1a);
-        vex.pal(1, 0x181f38);
-        vex.pal(2, 0x263458);
-        vex.pal(3, 0x374d7c);
-        vex.pal(4, 0x4b6ca2);
-        vex.pal(5, 0x638ec8);
-        vex.pal(6, 0x80b4ea);
-        vex.pal(7, 0xa2dcff);
+        vex.pal(0x0, 0x060810);
+        vex.pal(0x1, 0xf0c050);
+        vex.pal(0x2, 0x0c0e1a);
+        vex.pal(0x3, 0x121c2e);
+        vex.pal(0x4, 0x182c44);
+        vex.pal(0x5, 0x203e5c);
+        vex.pal(0x6, 0x285076);
+        vex.pal(0x7, 0x326492);
+        vex.pal(0x8, 0x3c7aae);
+        vex.pal(0x9, 0x4890c8);
+        vex.pal(0xA, 0x52a4e0);
+        vex.pal(0xB, 0x5cb6f0);
+        vex.pal(0xC, 0x66c6fc);
+        vex.pal(0xD, 0x70d4ff);
+        vex.pal(0xE, 0x78e0ff);
+        vex.pal(0xF, 0x80eaff);
     } else {
-        vex.pal(0, 0x0a180c);
-        vex.pal(1, 0x142e1c);
-        vex.pal(2, 0x1e4a2c);
-        vex.pal(3, 0x2c683e);
-        vex.pal(4, 0x3e8a52);
-        vex.pal(5, 0x56ae70);
-        vex.pal(6, 0x72d094);
-        vex.pal(7, 0x9cf0b8);
+        vex.pal(0x0, 0x060810);
+        vex.pal(0x1, 0xf0c050);
+        vex.pal(0x2, 0x0a180c);
+        vex.pal(0x3, 0x0f2414);
+        vex.pal(0x4, 0x14321e);
+        vex.pal(0x5, 0x1a422a);
+        vex.pal(0x6, 0x225438);
+        vex.pal(0x7, 0x2a6848);
+        vex.pal(0x8, 0x347e5a);
+        vex.pal(0x9, 0x3e966e);
+        vex.pal(0xA, 0x4aae82);
+        vex.pal(0xB, 0x56c496);
+        vex.pal(0xC, 0x62d8aa);
+        vex.pal(0xD, 0x6ceabc);
+        vex.pal(0xE, 0x76f8cc);
+        vex.pal(0xF, 0x80ffda);
     }
-    vex.pal(8, 0x060810);
-    vex.pal(9, 0xf0c050);
 }
 
 export fn boot() void {
@@ -179,7 +193,7 @@ var pmx: i32 = 160;
 var pmy: i32 = 90;
 
 export fn update() void {
-    vex.cls(8);
+    vex.cls(0);
 
     const mx = vex.mx();
     const my = vex.my();
@@ -262,7 +276,7 @@ export fn update() void {
         const ld = normalize(sub(light_pos, pc));
         const ld2 = normalize(sub(light2, pc));
         const intensity = clamp(0.15 + @max(0, dot(n, ld)) * 0.6 + @max(0, dot(n, ld2)) * 0.4, 0, 1);
-        const shade: i32 = @intFromFloat(intensity * 7.999);
+        const shade: i32 = 2 + @as(i32, @intFromFloat(intensity * 13.999));
 
         cmds[cmd_cnt] = .{
             .z = (cv0.z + cv1.z + cv2.z) * (1.0 / 3.0),
@@ -292,8 +306,8 @@ export fn update() void {
     const lx: i32 = @intFromFloat(lv.x / lv.z * focal * fscale + cx);
     const ly: i32 = @intFromFloat(-lv.y / lv.z * focal * fscale + cy);
 
-    vex.circ(lx, ly, 3, 9);
-    vex.circb(lx, ly, 3, 9);
+    vex.circ(lx, ly, 3, 1);
+    vex.circb(lx, ly, 3, 1);
     for (cmds[0..cmd_cnt]) |c| vex.tri(
         c.sx0,
         c.sy0,
