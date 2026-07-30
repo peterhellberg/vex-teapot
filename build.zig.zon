@@ -1,0 +1,17 @@
+.{
+    .name = .vex_teapot,
+    .version = "0.1.0",
+    .fingerprint = 0x706c7a82e45a9db,
+    .minimum_zig_version = "0.17.0-dev.387+31f157d80",
+    .dependencies = .{
+        .vex = .{
+            .url = "git+https://github.com/peterhellberg/vex.git#4a3fe610bba273e8dc47f60676e45b4084aad4ee",
+            .hash = "vex-0.2.6-fMaNOba1AADGWNNtibuZ_FfJn5YlgQpKTo-MjOwrw9yc",
+        },
+    },
+    .paths = .{
+        "build.zig",
+        "build.zig.zon",
+        "src",
+    },
+}
