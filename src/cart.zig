@@ -121,10 +121,7 @@ fn setPal(idx: u32) void {
     }
 }
 
-export fn boot() void {
-    vex.title("vex-teapot");
-    setPal(0);
-
+fn loadTeapot() void {
     var vi: u32 = 0;
     var ni: u32 = 0;
     var fi: u32 = 0;
@@ -177,6 +174,12 @@ export fn boot() void {
         .y = (mn.y + mx.y) / 2,
         .z = (mn.z + mx.z) / 2,
     };
+}
+
+export fn boot() void {
+    vex.title("vex-teapot");
+    setPal(0);
+    loadTeapot();
 }
 
 const light_presets = [3]Vec3{
