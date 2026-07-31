@@ -195,20 +195,26 @@ var pal_idx: u32 = 0;
 var cam_pos: Vec3 = .{
     .x = 0,
     .y = 0,
-    .z = -250,
+    .z = -300,
 };
-var rot_x: f32 = 0;
+var rot_x: f32 = -0.35;
 var rot_y: f32 = 0.5;
-var target_x: f32 = 0;
+var target_x: f32 = -0.35;
 var target_y: f32 = 0.5;
 var pmx: i32 = 160;
 var pmy: i32 = 90;
+var first_frame = true;
 
 export fn update() void {
     vex.cls(0);
 
     const mx = vex.mx();
     const my = vex.my();
+    if (first_frame) {
+        pmx = mx;
+        pmy = my;
+        first_frame = false;
+    }
     if (mx != pmx or my != pmy) {
         target_y = (@as(f32, @floatFromInt(mx)) / 320.0 - 0.5) * 6.2832;
         target_x = (@as(f32, @floatFromInt(my)) / 180.0 - 0.5) * 3.1416;
