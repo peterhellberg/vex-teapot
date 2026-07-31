@@ -7,7 +7,7 @@ var tris: [1024][3]u16 = undefined;
 var vert_cnt: u32 = 0;
 var norm_cnt: u32 = 0;
 var face_cnt: u32 = 0;
-var center = Vec3{ .x = 0, .y = 0, .z = 0 };
+var center: Vec3 = .{ .x = 0, .y = 0, .z = 0 };
 
 fn skipSpc(line: []const u8, idx: *u32) void {
     while (idx.* < line.len and line[idx.*] == ' ') idx.* += 1;
@@ -140,14 +140,14 @@ export fn boot() void {
             const x = parseF32(line, &idx);
             const y = parseF32(line, &idx);
             const z = parseF32(line, &idx);
-            verts[vi] = vec3(x, y, z);
+            verts[vi] = .{ .x = x, .y = y, .z = z };
             vi += 1;
         } else if (line.len >= 3 and line[0] == 'v' and line[1] == 'n') {
             var idx: u32 = 3;
             const x = parseF32(line, &idx);
             const y = parseF32(line, &idx);
             const z = parseF32(line, &idx);
-            norms[ni] = vec3(x, y, z);
+            norms[ni] = .{ .x = x, .y = y, .z = z };
             ni += 1;
         } else if (line.len >= 2 and line[0] == 'f' and line[1] == ' ') {
             var idx: u32 = 2;
@@ -162,8 +162,8 @@ export fn boot() void {
     norm_cnt = ni;
     face_cnt = fi;
 
-    var mn = vec3(1e9, 1e9, 1e9);
-    var mx = vec3(-1e9, -1e9, -1e9);
+    var mn: Vec3 = .{ .x = 1e9, .y = 1e9, .z = 1e9 };
+    var mx: Vec3 = .{ .x = -1e9, .y = -1e9, .z = -1e9 };
     for (verts[0..vi]) |vv| {
         if (vv.x < mn.x) mn.x = vv.x;
         if (vv.y < mn.y) mn.y = vv.y;
@@ -172,19 +172,31 @@ export fn boot() void {
         if (vv.y > mx.y) mx.y = vv.y;
         if (vv.z > mx.z) mx.z = vv.z;
     }
-    center = vec3((mn.x + mx.x) / 2, (mn.y + mx.y) / 2, (mn.z + mx.z) / 2);
+    center = Vec3{
+        .x = (mn.x + mx.x) / 2,
+        .y = (mn.y + mx.y) / 2,
+        .z = (mn.z + mx.z) / 2,
+    };
 }
 
 const light_presets = [3]Vec3{
-    Vec3{ .x = 100, .y = 120, .z = 80 },
-    Vec3{ .x = -120, .y = 50, .z = -80 },
-    Vec3{ .x = 0, .y = 150, .z = 0 },
+    .{ .x = 100, .y = 120, .z = 80 },
+    .{ .x = -120, .y = 50, .z = -80 },
+    .{ .x = 0, .y = 150, .z = 0 },
 };
 var light_pos = light_presets[0];
 var light_pos_idx: u32 = 2;
-const light2 = Vec3{ .x = -120, .y = 50, .z = -80 };
+const light2 = Vec3{
+    .x = -120,
+    .y = 50,
+    .z = -80,
+};
 var pal_idx: u32 = 0;
-var cam_pos = Vec3{ .x = 0, .y = 0, .z = -250 };
+var cam_pos: Vec3 = .{
+    .x = 0,
+    .y = 0,
+    .z = -250,
+};
 var rot_x: f32 = 0;
 var rot_y: f32 = 0.5;
 var target_x: f32 = 0;
@@ -269,7 +281,11 @@ export fn update() void {
         const e1 = sub(v1, v0);
         const e2 = sub(v2, v0);
         var n = cross(e1, e2);
-        n = vec3(-n.x, -n.y, -n.z);
+        n = Vec3{
+            .x = -n.x,
+            .y = -n.y,
+            .z = -n.z,
+        };
         n = normalize(n);
 
         const pc = avg3(v0, v1, v2);
@@ -308,6 +324,7 @@ export fn update() void {
 
     vex.circ(lx, ly, 3, 1);
     vex.circb(lx, ly, 3, 1);
+
     for (cmds[0..cmd_cnt]) |c| vex.tri(
         c.sx0,
         c.sy0,
@@ -325,20 +342,28 @@ const Vec3 = struct {
     z: f32,
 };
 
-fn vec3(x: f32, y: f32, z: f32) Vec3 {
-    return .{ .x = x, .y = y, .z = z };
-}
-
 fn add(a: Vec3, b: Vec3) Vec3 {
-    return .{ .x = a.x + b.x, .y = a.y + b.y, .z = a.z + b.z };
+    return .{
+        .x = a.x + b.x,
+        .y = a.y + b.y,
+        .z = a.z + b.z,
+    };
 }
 
 fn sub(a: Vec3, b: Vec3) Vec3 {
-    return .{ .x = a.x - b.x, .y = a.y - b.y, .z = a.z - b.z };
+    return .{
+        .x = a.x - b.x,
+        .y = a.y - b.y,
+        .z = a.z - b.z,
+    };
 }
 
 fn scale(a: Vec3, s: f32) Vec3 {
-    return .{ .x = a.x * s, .y = a.y * s, .z = a.z * s };
+    return .{
+        .x = a.x * s,
+        .y = a.y * s,
+        .z = a.z * s,
+    };
 }
 
 fn dot(a: Vec3, b: Vec3) f32 {
@@ -346,7 +371,11 @@ fn dot(a: Vec3, b: Vec3) f32 {
 }
 
 fn cross(a: Vec3, b: Vec3) Vec3 {
-    return .{ .x = a.y * b.z - a.z * b.y, .y = a.z * b.x - a.x * b.z, .z = a.x * b.y - a.y * b.x };
+    return .{
+        .x = a.y * b.z - a.z * b.y,
+        .y = a.z * b.x - a.x * b.z,
+        .z = a.x * b.y - a.y * b.x,
+    };
 }
 
 fn len(a: Vec3) f32 {
@@ -355,23 +384,42 @@ fn len(a: Vec3) f32 {
 
 fn normalize(a: Vec3) Vec3 {
     const l = len(a);
-    return if (l > 0) vec3(a.x / l, a.y / l, a.z / l) else a;
+
+    return if (l > 0) .{
+        .x = a.x / l,
+        .y = a.y / l,
+        .z = a.z / l,
+    } else a;
 }
 
 fn avg3(a: Vec3, b: Vec3, c: Vec3) Vec3 {
-    return vec3((a.x + b.x + c.x) / 3.0, (a.y + b.y + c.y) / 3.0, (a.z + b.z + c.z) / 3.0);
+    return .{
+        .x = (a.x + b.x + c.x) / 3.0,
+        .y = (a.y + b.y + c.y) / 3.0,
+        .z = (a.z + b.z + c.z) / 3.0,
+    };
 }
 
 fn rotateX(v: Vec3, a: f32) Vec3 {
     const c = @cos(a);
     const s = @sin(a);
-    return vec3(v.x, v.y * c - v.z * s, v.y * s + v.z * c);
+
+    return .{
+        .x = v.x,
+        .y = v.y * c - v.z * s,
+        .z = v.y * s + v.z * c,
+    };
 }
 
 fn rotateY(v: Vec3, a: f32) Vec3 {
     const c = @cos(a);
     const s = @sin(a);
-    return vec3(v.x * c + v.z * s, v.y, -v.x * s + v.z * c);
+
+    return .{
+        .x = v.x * c + v.z * s,
+        .y = v.y,
+        .z = -v.x * s + v.z * c,
+    };
 }
 
 fn clamp(v: f32, lo: f32, hi: f32) f32 {
