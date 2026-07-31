@@ -287,31 +287,35 @@ export fn update() void {
         const px2 = cv2.x / cv2.z;
         const py2 = cv2.y / cv2.z;
 
-        const e1 = sub(v1, v0);
-        const e2 = sub(v2, v0);
-        var n = cross(e1, e2);
-        n = Vec3{
-            .x = -n.x,
-            .y = -n.y,
-            .z = -n.z,
-        };
-        n = normalize(n);
-
         const pc = avg3(v0, v1, v2);
         const ld = normalize(sub(light_pos, pc));
         const ld2 = normalize(sub(light2, pc));
-        const intensity = clamp(0.15 + @max(0, dot(n, ld)) * 0.6 + @max(0, dot(n, ld2)) * 0.4, 0, 1);
+
+        const n0 = norms[f[0]];
+        const n1 = norms[f[1]];
+        const n2 = norms[f[2]];
+        const s0 = 0.15 + @max(0, dot(n0, ld)) * 0.6 + @max(0, dot(n0, ld2)) * 0.4;
+        const s1 = 0.15 + @max(0, dot(n1, ld)) * 0.6 + @max(0, dot(n1, ld2)) * 0.4;
+        const s2 = 0.15 + @max(0, dot(n2, ld)) * 0.6 + @max(0, dot(n2, ld2)) * 0.4;
+        const intensity = clamp((s0 + s1 + s2) * (1.0 / 3.0), 0, 1);
         const shade: i32 = 2 + @as(i32, @intFromFloat(intensity * 13.999));
+
+        const s0x = px0 * focal * fscale + cx;
+        const s0y = -py0 * focal * fscale + cy;
+        const s1x = px1 * focal * fscale + cx;
+        const s1y = -py1 * focal * fscale + cy;
+        const s2x = px2 * focal * fscale + cx;
+        const s2y = -py2 * focal * fscale + cy;
 
         cmds[cmd_cnt] = .{
             .z = (cv0.z + cv1.z + cv2.z) * (1.0 / 3.0),
             .shade = shade,
-            .sx0 = @intFromFloat(px0 * focal * fscale + cx),
-            .sy0 = @intFromFloat(-py0 * focal * fscale + cy),
-            .sx1 = @intFromFloat(px1 * focal * fscale + cx),
-            .sy1 = @intFromFloat(-py1 * focal * fscale + cy),
-            .sx2 = @intFromFloat(px2 * focal * fscale + cx),
-            .sy2 = @intFromFloat(-py2 * focal * fscale + cy),
+            .sx0 = @intFromFloat(s0x),
+            .sy0 = @intFromFloat(s0y),
+            .sx1 = @intFromFloat(s1x),
+            .sy1 = @intFromFloat(s1y),
+            .sx2 = @intFromFloat(s2x),
+            .sy2 = @intFromFloat(s2y),
         };
         cmd_cnt += 1;
     }
@@ -432,5 +436,5 @@ fn rotateY(v: Vec3, a: f32) Vec3 {
 }
 
 fn clamp(v: f32, lo: f32, hi: f32) f32 {
-    return @max(lo, @min(hi, v));
+    return @min(hi, @max(lo, v));
 }
