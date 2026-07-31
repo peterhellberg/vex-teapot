@@ -10,7 +10,7 @@ var face_cnt: u32 = 0;
 var center: Vec3 = .{ .x = 0, .y = 0, .z = 0 };
 
 fn skipSpc(line: []const u8, idx: *u32) void {
-    while (idx.* < line.len and line[idx.*] == ' ') idx.* += 1;
+    while (idx.* < line.len and (line[idx.*] == ' ' or line[idx.*] == '\t')) idx.* += 1;
 }
 
 fn parseF32(line: []const u8, idx: *u32) f32 {
