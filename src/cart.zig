@@ -344,15 +344,28 @@ export fn update() void {
     vex.circ(lx, ly, 3, 1);
     vex.circb(lx, ly, 3, 1);
 
-    for (cmds[0..cmd_cnt]) |c| vex.tri(
-        c.sx0,
-        c.sy0,
-        c.sx1,
-        c.sy1,
-        c.sx2,
-        c.sy2,
-        c.shade,
-    );
+    const wire = vex.mdown(vex.MOUSE_LEFT);
+    for (cmds[0..cmd_cnt]) |c| {
+        if (wire) {
+            vex.trib(
+                c.sx0,
+                c.sy0,
+                c.sx1,
+                c.sy1,
+                c.sx2,
+                c.sy2,
+                c.shade,
+            );
+        } else vex.tri(
+            c.sx0,
+            c.sy0,
+            c.sx1,
+            c.sy1,
+            c.sx2,
+            c.sy2,
+            c.shade,
+        );
+    }
 }
 
 const Vec3 = struct {
