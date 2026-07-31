@@ -361,14 +361,6 @@ const Vec3 = struct {
     z: f32,
 };
 
-fn add(a: Vec3, b: Vec3) Vec3 {
-    return .{
-        .x = a.x + b.x,
-        .y = a.y + b.y,
-        .z = a.z + b.z,
-    };
-}
-
 fn sub(a: Vec3, b: Vec3) Vec3 {
     return .{
         .x = a.x - b.x,
@@ -377,24 +369,8 @@ fn sub(a: Vec3, b: Vec3) Vec3 {
     };
 }
 
-fn scale(a: Vec3, s: f32) Vec3 {
-    return .{
-        .x = a.x * s,
-        .y = a.y * s,
-        .z = a.z * s,
-    };
-}
-
 fn dot(a: Vec3, b: Vec3) f32 {
     return a.x * b.x + a.y * b.y + a.z * b.z;
-}
-
-fn cross(a: Vec3, b: Vec3) Vec3 {
-    return .{
-        .x = a.y * b.z - a.z * b.y,
-        .y = a.z * b.x - a.x * b.z,
-        .z = a.x * b.y - a.y * b.x,
-    };
 }
 
 fn len(a: Vec3) f32 {
