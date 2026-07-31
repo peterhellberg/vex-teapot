@@ -249,11 +249,17 @@ export fn update() void {
     const cy: f32 = 90;
 
     var xf: [530]Vec3 = undefined;
+    var xn: [530]Vec3 = undefined;
     for (verts[0..vert_cnt], 0..) |vp, i| {
         var v = sub(vp, center);
         v = rotateY(v, rot_y);
         v = rotateX(v, rot_x);
         xf[i] = v;
+
+        var n = norms[i];
+        n = rotateY(n, rot_y);
+        n = rotateX(n, rot_x);
+        xn[i] = n;
     }
 
     const lv = sub(light_pos, cam_pos);
@@ -291,9 +297,9 @@ export fn update() void {
         const ld = normalize(sub(light_pos, pc));
         const ld2 = normalize(sub(light2, pc));
 
-        const n0 = norms[f[0]];
-        const n1 = norms[f[1]];
-        const n2 = norms[f[2]];
+        const n0 = xn[f[0]];
+        const n1 = xn[f[1]];
+        const n2 = xn[f[2]];
         const s0 = 0.15 + @max(0, dot(n0, ld)) * 0.6 + @max(0, dot(n0, ld2)) * 0.4;
         const s1 = 0.15 + @max(0, dot(n1, ld)) * 0.6 + @max(0, dot(n1, ld2)) * 0.4;
         const s2 = 0.15 + @max(0, dot(n2, ld)) * 0.6 + @max(0, dot(n2, ld2)) * 0.4;
