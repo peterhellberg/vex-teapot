@@ -187,7 +187,7 @@ const light_presets = [3]Vec3{
     .{ .x = -120, .y = 50, .z = -80 },
     .{ .x = 0, .y = 150, .z = 0 },
 };
-var light_pos = light_presets[0];
+var light_pos = light_presets[2];
 var light_pos_idx: u32 = 2;
 const light2 = Vec3{
     .x = -120,
