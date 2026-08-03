@@ -1,6 +1,8 @@
 const std = @import("std");
 
 pub fn build(b: *std.Build) void {
+    const name = "vex-teapot";
+
     // Carts compile to wasm32-freestanding.
     const wasm_target = b.resolveTargetQuery(.{
         .cpu_arch = .wasm32,
@@ -13,7 +15,7 @@ pub fn build(b: *std.Build) void {
     const vex = b.dependency("vex", .{});
 
     const cart = b.addExecutable(.{
-        .name = "vex-teapot",
+        .name = name,
         .root_module = b.createModule(.{
             .root_source_file = b.path("src/cart.zig"),
             .target = wasm_target,
@@ -47,7 +49,7 @@ pub fn build(b: *std.Build) void {
     // `zig build run` builds + installs the cart and runs it in vex-run, the
     // pure-Go native host (no raylib/wasm3, no X11 dev headers required).
     // --watch makes a concurrent `zig build --watch` reload it automatically.
-    const run = b.addSystemCommand(&.{ "vex-run", "--watch" });
+    const run = b.addSystemCommand(&.{ "vex-run", "-watch" });
     run.addArg(wasm);
     run.step.dependOn(b.getInstallStep());
     if (b.args) |args| run.addArgs(args);
@@ -68,15 +70,13 @@ pub fn build(b: *std.Build) void {
     b.step("bundle", "Build the cart and write a static bundle with vex-web").dependOn(&bundle.step);
 
     // `zig build deploy` bundles, copies src/ into the bundle, then scp's
-    // it to play.c7.se. Edit scp_target / public_url below to point at
-    // your own hosting setup.
     const scp_target = "c7.se:/var/www/play.c7.se/vex/";
-    const public_url = "https://play.c7.se/vex/" ++ "vex-teapot" ++ "/";
+    const public_url = "https://play.c7.se/vex/" ++ name ++ "/";
 
-    const rm_src = b.addSystemCommand(&.{ "rm", "-rf", "bundle/" ++ "vex-teapot" ++ "/src" });
+    const rm_src = b.addSystemCommand(&.{ "rm", "-rf", "bundle/" ++ name ++ "/src" });
     rm_src.step.dependOn(&bundle.step);
 
-    const copy_src = b.addSystemCommand(&.{ "cp", "-r", "src", "bundle/" ++ "vex-teapot" ++ "/." });
+    const copy_src = b.addSystemCommand(&.{ "cp", "-r", "src", "bundle/" ++ name ++ "/." });
     copy_src.step.dependOn(&rm_src.step);
 
     const deploy_cmd = "scp -r bundle/* " ++ scp_target ++
