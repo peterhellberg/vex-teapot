@@ -5,8 +5,8 @@
     .minimum_zig_version = "0.17.0-dev.387+31f157d80",
     .dependencies = .{
         .vex = .{
-            .url = "https://github.com/peterhellberg/vex/archive/refs/tags/v0.2.9.tar.gz",
-            .hash = "vex-0.2.9-fMaNOdi1AAAb1ZNEiwbDloWq1OYnrMPYI_SBwBR_FIag",
+            .url = "git+https://github.com/peterhellberg/vex.git#ab978646c9ca86a51703fbe6a42c0546a38daffb",
+            .hash = "vex-0.3.0-fMaNOe-2AAAwrWyySXnTUyhIotKyDAY9Hgz14bQxHo_Q",
         },
     },
     .paths = .{
