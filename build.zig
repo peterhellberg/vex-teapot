@@ -49,7 +49,7 @@ pub fn build(b: *std.Build) void {
     // `zig build run` builds + installs the cart and runs it in vex-run, the
     // pure-Go native host (no raylib/wasm3, no X11 dev headers required).
     // --watch makes a concurrent `zig build --watch` reload it automatically.
-    const run = b.addSystemCommand(&.{ "vex-run", "-watch" });
+    const run = b.addSystemCommand(&.{ "vex", "-w" });
     run.addArg(wasm);
     run.step.dependOn(b.getInstallStep());
     if (b.args) |args| run.addArgs(args);
