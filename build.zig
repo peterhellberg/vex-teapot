@@ -46,9 +46,7 @@ pub fn build(b: *std.Build) void {
     // tools must be on your PATH (e.g. via `make install` in the vex repo).
     const wasm = b.getInstallPath(.bin, cart.out_filename);
 
-    // `zig build run` builds + installs the cart and runs it in vex-run, the
-    // pure-Go native host (no raylib/wasm3, no X11 dev headers required).
-    // --watch makes a concurrent `zig build --watch` reload it automatically.
+    // `zig build run` builds + installs the cart and runs it in vex.
     const run = b.addSystemCommand(&.{ "vex", "-w" });
     run.addArg(wasm);
     run.step.dependOn(b.getInstallStep());
