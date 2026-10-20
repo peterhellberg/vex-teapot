@@ -1,12 +1,12 @@
 .{
     .name = .vex_teapot,
     .version = "0.1.0",
-    .fingerprint = 0x706c7a82e45a9db,
-    .minimum_zig_version = "0.17.0-dev.387+31f157d80",
+    .fingerprint = 0x706c7a88e165ef0,
+    .minimum_zig_version = "0.17.0",
     .dependencies = .{
         .vex = .{
-            .url = "git+https://github.com/peterhellberg/vex.git#ab978646c9ca86a51703fbe6a42c0546a38daffb",
-            .hash = "vex-0.3.0-fMaNOe-2AAAwrWyySXnTUyhIotKyDAY9Hgz14bQxHo_Q",
+            .url = "git+https://github.com/peterhellberg/vex.git#e49418acb27a3fd26bd9e42cc881c87fe8eaf4b4",
+            .hash = "vex-0.6.2-fMaNORpyAQBvLQrVQsQewhR8v7ULbIDLTrbZcl_pcB48",
         },
     },
     .paths = .{
